@@ -1,7 +1,7 @@
 package com.career.copilot.controller;
 
-import com.career.copilot.agent.YuManus;
-import com.career.copilot.app.LoveApp;
+import com.career.copilot.agent.SuperCareerAgent;
+import com.career.copilot.app.CareerAssistantApp;
 import jakarta.annotation.Resource;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.tool.ToolCallback;
@@ -20,7 +20,7 @@ import java.io.IOException;
 public class AiController {
 
     @Resource
-    private LoveApp loveApp;
+    private CareerAssistantApp careerAssistantApp;
 
     @Resource
     private ToolCallback[] allTools;
@@ -35,9 +35,9 @@ public class AiController {
      * @param chatId
      * @return
      */
-    @GetMapping("/love_app/chat/sync")
-    public String doChatWithLoveAppSync(String message, String chatId) {
-        return loveApp.doChat(message, chatId);
+    @GetMapping("/career/chat/sync")
+    public String doChatWithCareerAssistantAppSync(String message, String chatId) {
+        return careerAssistantApp.doChat(message, chatId);
     }
 
     /**
@@ -47,9 +47,9 @@ public class AiController {
      * @param chatId
      * @return
      */
-    @GetMapping(value = "/love_app/chat/sse", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<String> doChatWithLoveAppSSE(String message, String chatId) {
-        return loveApp.doChatByStream(message, chatId);
+    @GetMapping(value = "/career/chat/sse", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<String> doChatWithCareerAssistantAppSSE(String message, String chatId) {
+        return careerAssistantApp.doChatByStream(message, chatId);
     }
 
     /**
@@ -59,9 +59,9 @@ public class AiController {
      * @param chatId
      * @return
      */
-    @GetMapping(value = "/love_app/chat/server_sent_event")
-    public Flux<ServerSentEvent<String>> doChatWithLoveAppServerSentEvent(String message, String chatId) {
-        return loveApp.doChatByStream(message, chatId)
+    @GetMapping(value = "/career/chat/server_sent_event")
+    public Flux<ServerSentEvent<String>> doChatWithCareerAssistantAppServerSentEvent(String message, String chatId) {
+        return careerAssistantApp.doChatByStream(message, chatId)
                 .map(chunk -> ServerSentEvent.<String>builder()
                         .data(chunk)
                         .build());
@@ -74,12 +74,12 @@ public class AiController {
      * @param chatId
      * @return
      */
-    @GetMapping(value = "/love_app/chat/sse_emitter")
-    public SseEmitter doChatWithLoveAppServerSseEmitter(String message, String chatId) {
+    @GetMapping(value = "/career/chat/sse_emitter")
+    public SseEmitter doChatWithCareerAssistantAppServerSseEmitter(String message, String chatId) {
         // 创建一个超时时间较长的 SseEmitter
         SseEmitter sseEmitter = new SseEmitter(180000L); // 3 分钟超时
         // 获取 Flux 响应式数据流并且直接通过订阅推送给 SseEmitter
-        loveApp.doChatByStream(message, chatId)
+        careerAssistantApp.doChatByStream(message, chatId)
                 .subscribe(chunk -> {
                     try {
                         sseEmitter.send(chunk);
@@ -92,15 +92,15 @@ public class AiController {
     }
 
     /**
-     * 流式调用 Manus 超级智能体
+     * 流式调用 CareerAgent 超级智能体
      *
      * @param message
      * @return
      */
-    @GetMapping("/manus/chat")
-    public SseEmitter doChatWithManus(String message) {
-        YuManus yuManus = new YuManus(allTools, dashscopeChatModel);
-        return yuManus.runStream(message);
+    @GetMapping("/agent/chat")
+    public SseEmitter doChatWithCareerAgent(String message) {
+        SuperCareerAgent superCareerAgent = new SuperCareerAgent(allTools, dashscopeChatModel);
+        return superCareerAgent.runStream(message);
     }
 }
 
