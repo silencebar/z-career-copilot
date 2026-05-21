@@ -1,8 +1,8 @@
-# Z-Career-Copilot
+# z-Career-Copilot
 
 ## 项目简介
 
-Z-Career-Copilot 是一个基于 Spring AI 与 MCP 构建的 AI 职场沟通辅助平台，  
+z-Career-Copilot 是一个基于 Spring AI 与 MCP 构建的 AI 职场沟通辅助平台，  
 聚焦面试辅导、表达优化、任务规划与智能问答等真实职场场景，  
 提供具备多轮会话记忆、RAG 检索增强、Tool Calling 与智能体规划能力的 AI 助手。
 
